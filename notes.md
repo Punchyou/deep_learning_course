@@ -1,6 +1,7 @@
 
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 # Notes
-
+_To view the following equations on GitHub, you will need the [MathaJax for GitHub plugin](https://chrome.google.com/webstore/detail/mathjax-plugin-for-github/ioemnmodlmafdkllaclgeombjnmnbima?hl=en)_.
 ## Vectorization
 
 ```py
@@ -58,9 +59,9 @@ A 1-hidden, 1-node is more of "shallow" NN (like logistic regression). A "Deep" 
 
 
 ### Dimensions
-* W[l]: (n[l], n[l-1])
-* b[l]: (n[l], 1)
-* Z[l], A[l]: (n[l], m)
+* $W^{[l]}: (n^{[l]}, n^{[l-1]})$
+* $b^{[l]}: (n^{[l]}, 1)$
+* $Z^{[l]}, A^{[l]}: (n^{[l]}, m)$
 
 Same for derivative's dimensions, for back propagation.
 
@@ -131,19 +132,24 @@ The more weights, the smaller we want them to be so z is mid-size. We can do:
 w[i] = np.random.randn(shape_of_matrix)*np.sqrt(1/n[l-1]) #(or 2/n... for ReLU)
 ```
 ### Check your derivaties computation in back probagation
+Use this ONLY yo debug.
 Numerical checking of gradients:
-* Take W[i], b[i], ... W[L], b[L] and reshape them into a bog vector *θ*.
-* Take dW[i], db[i], ... dW[L], db[L] and reshape them into a bog vector *dθ*.
-So now we have J(θ).
+* Take $W^{[i]}, b^{[i]}, ... W^{[L]}, b^{[L]}$ and reshape them into a bog vector $θ$.
+* Take $dW^{[i]}, db^{[i]}, ... dW^{[L]}, db^{[L]}$ and reshape them into a bog vector $dθ$.
+So now we have $J(θ)$.
 * Do a for each:
-    * find dθ and check:
-    * 
+    * find $dθ$ and check:
+    * Calculate the Euclidian distance between $dθ$ and $dθ_{approx}$. if this is something like $10^{-7}$ should be fine
 
+Remember to do grad check with regulirizations, and that this doesn't work with dropout - turn in on after debugging. Also, we can run grad check with random initilization and let it rin for a while.
 
+## Optimization Algorithms
+### Mini-batch gradient descent
+* Break the training set in mono-batches: $X^{\{1\}}, X^{\{2\}}, ..., X^{\{m\}}$
 
 
 ## Tips
 * Start with a small NN or even logistic regression.
 * Debug Gradient descent by plotting J to # of iterations to see if J reduces monotonically.
-* Normalize inputs: bring everything around zero by removing the average, and then normilize the variance (x /= σ^2).
+* Normalize inputs: bring everything around zero by removing the average, and then normilize the variance with `x /= σ^2`.
     
