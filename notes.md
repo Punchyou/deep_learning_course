@@ -39,15 +39,17 @@ asserta.shape(a) == (5, 1)
 
 _See solutions of week 2 here: https://github.com/Kulbear/deep-learning-coursera/blob/master/Neural%20Networks%20and%20Deep%20Learning/Week%202%20Quiz%20-%20Neural%20Network%20Basics.md_
 
-## Neural Networks
+# Neural Networks
 
-#### Notation
+### Notation
+
 * () for training examples
 * [] for layer number
 * {} for mini-batches od data
 * 1 "epoch" is a single pass through the training set (iteration)
 * := values gets updated
-### NNs
+
+## NNs
 NNs are like taking the liner regression and repeating it twice
 
 We can initialize all weights to zero in logistic regression but not in NNs. All hidden units will be symmetrical, so they'll calculate the same function, and we want them to calculate different functions. Ideally, we want small initializations, so we can do:
@@ -61,7 +63,7 @@ A 1-hidden, 1-node is more of "shallow" NN (like logistic regression). A "Deep" 
 
 
 
-### Dimensions
+## Dimensions
 * $W^{[l]}: (n^{[l]}, n^{[l-1]})$
 * $b^{[l]}: (n^{[l]}, 1)$
 * $Z^{[l]}, A^{[l]}: (n^{[l]}, m)$
@@ -71,8 +73,8 @@ Same for derivative's dimensions, for back propagation.
 In a way, the first layers of a NN calculate simpler functions (high level like hard lines in an image) and then they are composed together and they calculate more complex things (like details in an image like brows).
 
 
-## High Bias - High Variance
-### Identify them
+# High Bias - High Variance
+## Identify them
 
 Errors examples:
 
@@ -82,11 +84,11 @@ Errors examples:
     Train: 0.5% & Dev: 1% -> Low Bias & Low Variance s
 
 
-### Basic recipie for improving ML results
+## Basic recipie for improving ML results
 * High Bias (training set performance bad) -> Bigger Network or train longer
 * High Variance (validation set performance bad) -> More data or Regularization or dropout reguliration
 
-### Regularization
+## Regularization
 Do it when we have high variance: Add a parameter at the end (penalize) of the Cost Function J(w[i], b[i]) like L2 (most popular). Can also add L1.
 
 After L2 (or Frobenius Norm or weight decay) regularization w will be sparse, so it will have a lot of zeros, so lew memory to store them. λ is the regularization parameter. We usually set this when using cross validation, or defiining hyperparameters.
@@ -113,20 +115,20 @@ Notes
 * We can also have different keep_probability for each layer.
 * Downside: not well defined J, so  the J to # iterations plot won't work.
 
-### More regulirization methods
+## More regulirization methods
 
-#### Data Augmentation
+### Data Augmentation
 
 **Example**: take a pic from yout examples, flip it, rotate it, spread it etc, and add all thos new images to the dataset.
 
-#### Early stoppin
+### Early stoppin
 
 Plot # iteration to error, dev error and training error or J. When those two start seperate, that's the # of iterentions to stop at. That way we have a mid-size w, so again smaller w, so the NN does not iterate too many times to fit the data completely.
 
 
-## Optimizations
+# Optimizations
 
-### Exploding/vanishing gradients
+## Exploding/vanishing gradients
 Deep networks can have exponential small or big gradients (is a functions of L), so it will never finds 0 and training is very hard. The solution is to randomly initialize the weights.
 
 The more weights, the smaller we want them to be so z is mid-size. We can do:
@@ -134,7 +136,7 @@ The more weights, the smaller we want them to be so z is mid-size. We can do:
 ```py
 w[i] = np.random.randn(shape_of_matrix)*np.sqrt(1/n[l-1]) #(or 2/n... for ReLU)
 ```
-### Check your derivaties computation in back probagation
+## Check your derivaties computation in back probagation
 Use this ONLY yo debug.
 Numerical checking of gradients:
 * Take $W^{[i]}, b^{[i]}, ... W^{[L]}, b^{[L]}$ and reshape them into a bog vector $θ$.
@@ -147,7 +149,7 @@ So now we have $J(θ)$.
 Remember to do grad check with regulirizations, and that this doesn't work with dropout - turn in on after debugging. Also, we can run grad check with random initilization and let it rin for a while.
 
 ## Optimization Algorithms - Make your algorithms run faster
-### Mini-batch gradient descent
+## Mini-batch gradient descent
 * Break the training set in mono-batches: $X^{\{1\}}, X^{\{2\}}, ..., X^{\{m\}}$, so we have $Y^{\{1\}}, Y^{\{2\}}, ..., Y^{\{m\}}$ as our predictions. We can run them all in the same time.
 
 Implementing this, we would have a for loop for all the batches, and the equaztions would be calculated for each mini batch (Zs, bs, Js and Ys). In mini-batch approach, instead of having 1 gradient descenr for 1 epoch, we have 5000 (for batches).
@@ -159,8 +161,10 @@ Implementing this, we would have a for loop for all the batches, and the equazti
 Typical mini-batches: $2^6, 2^7, 2^8$.
 
 
-### More optimization algs
-#### Moving/Exponential weighted average
+## More optimization algs
+
+### Moving/Exponential weighted average
+
 $V_t = β*V_{t-1} + (1 - β)* θ_t$
 
 $β = weight$
@@ -176,16 +180,57 @@ $V_t = {1/(1 - β_t)}$
 No need to have Nias correction here.
 
 
-#### Momentum
+### Momentum
+
 We want slower learninf rate vertically, and faster horizontally:
 
-$V_t = β*V_{dw} + (1 - β)* db$
+$V_t = β*V_{dw} + (1 - β)* dw$
+
+$V_t = β*V_{db} + (1 - β)* db$
 
 $w := w - aV_dw$
 
 $b := b - aV_db$
 
+### RMSprop - Root Mean Square algorithm
 
+Given horizontal is $w$, and vertical $b$, on iteration $t$:
+
+$S_{dw} = β*S_{dw} + (1 - β)dw^2$ -> where dw is small, so s smaller
+
+$S_{db} = β*S_{db} + (1 - β)db^2$ -> where db is large, so larger
+
+$w := w - \frac{a}{\sqrt{{S_{dw}}}}$
+
+$b := b - \frac{a}{\sqrt{{S_{db}}}}$
+
+
+### ADAM - Adaptive Moment Estimation (Momentum + RMSprop with Bias correction)
+Usually done  with mini-batch.
+Updates:
+
+$w := w - a*\frac{{V_{dw}}^{corrected}}{\sqrt{{S_{dw}}^{corrected}+ ε}}$
+
+$b := b - a*\frac{{V_{db}}^{corrected}}{\sqrt{{S_{db}}^{corrected}+ ε}}$
+
+Hyperparameters:
+* a needs to be tuned
+* $β_{1}$: set to 0.9
+* $β_{1}$: set to 0.999
+* ε: doesn't matter
+
+### Learning Rate Decay
+Slowly slow your learning rate a, so it starts to converge. Biiger step at the beggining, smaller as goes closer to fitting.
+
+
+$$a = \frac{1}{1 + decayRate * epochNum} * a_0$$
+
+Tuning a is only an option for small sets.
+
+### Local optima
+Gradient descents can get stuck on local optimas, instead of finding the global optima. In high dimentional spaces, we prefer **suddle** points rather tahn optimas, as the probability of finding the optima is much smaller.
+
+Problem of playeaus: Gradient being around 0 for a long time (kind of flat surface), and they are more common thatn loca optimas. Algs like ADAM can help with plateaus.
 
 
 ## Tips
@@ -193,3 +238,5 @@ $b := b - aV_db$
 * Debug Gradient descent by plotting J to # of iterations to see if J reduces monotonically.
 * Normalize inputs: bring everything around zero by removing the average, and then normilize the variance with `x /= σ^2`.
     
+## Deep Learning Heroes
+* 
