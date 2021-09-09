@@ -44,9 +44,12 @@ _See solutions of week 2 here: https://github.com/Kulbear/deep-learning-coursera
 #### Notation
 * () for training examples
 * [] for layer number
-It's like taking the liner regression and repeating it twice
-
+* {} for mini-batches od data
+* 1 "epoch" is a single pass through the training set (iteration)
+* := values gets updated
 ### NNs
+NNs are like taking the liner regression and repeating it twice
+
 We can initialize all weights to zero in logistic regression but not in NNs. All hidden units will be symmetrical, so they'll calculate the same function, and we want them to calculate different functions. Ideally, we want small initializations, so we can do:
 
 ```py
@@ -121,7 +124,7 @@ Notes
 Plot # iteration to error, dev error and training error or J. When those two start seperate, that's the # of iterentions to stop at. That way we have a mid-size w, so again smaller w, so the NN does not iterate too many times to fit the data completely.
 
 
-## Optimization
+## Optimizations
 
 ### Exploding/vanishing gradients
 Deep networks can have exponential small or big gradients (is a functions of L), so it will never finds 0 and training is very hard. The solution is to randomly initialize the weights.
@@ -143,9 +146,46 @@ So now we have $J(θ)$.
 
 Remember to do grad check with regulirizations, and that this doesn't work with dropout - turn in on after debugging. Also, we can run grad check with random initilization and let it rin for a while.
 
-## Optimization Algorithms
+## Optimization Algorithms - Make your algorithms run faster
 ### Mini-batch gradient descent
-* Break the training set in mono-batches: $X^{\{1\}}, X^{\{2\}}, ..., X^{\{m\}}$
+* Break the training set in mono-batches: $X^{\{1\}}, X^{\{2\}}, ..., X^{\{m\}}$, so we have $Y^{\{1\}}, Y^{\{2\}}, ..., Y^{\{m\}}$ as our predictions. We can run them all in the same time.
+
+Implementing this, we would have a for loop for all the batches, and the equaztions would be calculated for each mini batch (Zs, bs, Js and Ys). In mini-batch approach, instead of having 1 gradient descenr for 1 epoch, we have 5000 (for batches).
+
+    If mini-batch size = m: Batch Grdient Descent (use it for small sets, <= 2000)
+    If mini-batch size = 1: Stohastic Gradient Descent
+    Ideal mono-batch size: somewhere in the middle + vectorization -> much faster
+
+Typical mini-batches: $2^6, 2^7, 2^8$.
+
+
+### More optimization algs
+#### Moving/Exponential weighted average
+$V_t = β*V_{t-1} + (1 - β)* θ_t$
+
+$β = weight$
+
+$V = average$
+
+Adapts more slower to data changes, but is used to have less data in memory and have faster training.
+
+To avoid the delay, we do a **Bias correction**:
+
+$V_t = {1/(1 - β_t)}$
+
+No need to have Nias correction here.
+
+
+#### Momentum
+We want slower learninf rate vertically, and faster horizontally:
+
+$V_t = β*V_{dw} + (1 - β)* db$
+
+$w := w - aV_dw$
+
+$b := b - aV_db$
+
+
 
 
 ## Tips
