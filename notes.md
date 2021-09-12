@@ -43,11 +43,11 @@ _See solutions of week 2 here: https://github.com/Kulbear/deep-learning-coursera
 
 ### Notation
 
-* () for training examples
-* [] for layer number
-* {} for mini-batches od data
-* 1 "epoch" is a single pass through the training set (iteration)
-* := values gets updated
+* `()` for training examples
+* `[]` for layer number
+* `{}` for mini-batches od data
+* `1 "epoch"` is a single pass through the training set (iteration)
+* `:=` values gets updated
 
 ## NNs
 NNs are like taking the liner regression and repeating it twice
@@ -165,17 +165,17 @@ Typical mini-batches: $2^6, 2^7, 2^8$.
 
 ### Moving/Exponential weighted average
 
-$V_t = β*V_{t-1} + (1 - β)* θ_t$
+$$V_t = β*V_{t-1} + (1 - β)* θ_t$$
 
-$β = weight$
+$$β = weight$$
 
-$V = average$
+$$V = average$$
 
 Adapts more slower to data changes, but is used to have less data in memory and have faster training.
 
 To avoid the delay, we do a **Bias correction**:
 
-$V_t = {1/(1 - β_t)}$
+$$V_t = {1/(1 - β_t)}$$
 
 No need to have Nias correction here.
 
@@ -184,38 +184,40 @@ No need to have Nias correction here.
 
 We want slower learninf rate vertically, and faster horizontally:
 
-$V_t = β*V_{dw} + (1 - β)* dw$
+$$V_t = β*V_{dw} + (1 - β)* dw$$
 
-$V_t = β*V_{db} + (1 - β)* db$
+$$V_t = β*V_{db} + (1 - β)* db$$
 
-$w := w - aV_dw$
+$$w := w - aV_dw$$
 
-$b := b - aV_db$
+$$b := b - aV_db$$
 
 ### RMSprop - Root Mean Square algorithm
 
 Given horizontal is $w$, and vertical $b$, on iteration $t$:
 
-$S_{dw} = β*S_{dw} + (1 - β)dw^2$ -> where dw is small, so s smaller
+$$S_{dw} = β*S_{dw} + (1 - β)dw^2$$
+where $dw$ is small, so s smaller
 
-$S_{db} = β*S_{db} + (1 - β)db^2$ -> where db is large, so larger
+$$S_{db} = β*S_{db} + (1 - β)db^2$$
+where $db$ is large, so larger
 
-$w := w - \frac{a}{\sqrt{{S_{dw}}}}$
+$$w := w - \frac{a}{\sqrt{{S_{dw}}}}$$
 
-$b := b - \frac{a}{\sqrt{{S_{db}}}}$
+$$b := b - \frac{a}{\sqrt{{S_{db}}}}$$
 
 
 ### ADAM - Adaptive Moment Estimation (Momentum + RMSprop with Bias correction)
 Usually done  with mini-batch.
 Updates:
 
-$w := w - a*\frac{{V_{dw}}^{corrected}}{\sqrt{{S_{dw}}^{corrected}+ ε}}$
+$$w := w - a*\frac{{V_{dw}}^{corrected}}{\sqrt{{S_{dw}}^{corrected}+ ε}}$$
 
-$b := b - a*\frac{{V_{db}}^{corrected}}{\sqrt{{S_{db}}^{corrected}+ ε}}$
+$$b := b - a*\frac{{V_{db}}^{corrected}}{\sqrt{{S_{db}}^{corrected}+ ε}}$$
 
 Hyperparameters:
 * a needs to be tuned
-* $β_{1}$: set to 0.9
+* $β_{1}$: set to 0.9, but could be tuned
 * $β_{1}$: set to 0.999
 * ε: doesn't matter
 
@@ -233,10 +235,38 @@ Gradient descents can get stuck on local optimas, instead of finding the global 
 Problem of playeaus: Gradient being around 0 for a long time (kind of flat surface), and they are more common thatn loca optimas. Algs like ADAM can help with plateaus.
 
 
+## Hyperparameters Tuning
+Most important is a, β (0.9 is a good start), mini-batch and number of hidden layers.
+
+### Tunning methods
+* Don't ues grid - try random
+* Use Coarse to fine - zoom in to a smaller region of hyperparameters if a small set works better
+
+### Pick the right scale for hyperparameters
+* Could try a logarithmic scale
+
+$$r = -4 * np.random.rand()$$
+$$a = 10^r$$
+
+Logarithmic works well for yperparameters for exponentially weighted averages. That's because β is very sensitive.
+
+## Batch Normalization
+For easier hyperparameter tuning.
+
+* For every hidden layer, we normilize the activation funcions, so the next layer learns faster.
+* This can be done on z before the activation function on z (or after the activation on a)
+
+We now use $z^{u[i](i)}$ instead of $z^{(i)}$. (adding γ and β)
+
+
+
 ## Tips
 * Start with a small NN or even logistic regression.
 * Debug Gradient descent by plotting J to # of iterations to see if J reduces monotonically.
 * Normalize inputs: bring everything around zero by removing the average, and then normilize the variance with `x /= σ^2`.
-    
+* Pandas Way: Re-test hyperparameters (maybe change the learning rate) occasionally after data change OR
+* Caviar way: Could train models the same time
+
+
 ## Deep Learning Heroes
 * 
