@@ -48,6 +48,7 @@ _See solutions of week 2 here: https://github.com/Kulbear/deep-learning-coursera
 * `{}` for mini-batches od data
 * `1 "epoch"` is a single pass through the training set (iteration)
 * `:=` values gets updated
+* `C` number of classes to predict
 
 ## NNs
 NNs are like taking the liner regression and repeating it twice
@@ -258,6 +259,57 @@ For easier hyperparameter tuning.
 
 We now use $z^{u[i](i)}$ instead of $z^{(i)}$. (adding γ and β)
 
+### Batch Normalization for NNs
+Add the batch norm step between $z$ s. After every we have a new z, where we add batch norm before apply a.
+
+We now also have two more additional parameters:
+* $γ^{[l]}$ and $β^{[l]}$, and we also have updates of those values: $β^{[l]} = β^{[l]} - a*β^{[l]}$ and $γ^{[l]} = γ^{[l]} - a*γ^{[l]}$
+* For mini-batches, you do that for every $X^{\{i\}}$
+* because batch norm zeros out the mean of b, at the end we have: $z^{~[l]} = γ^{[l]} z^{[l]}_{norm} +β^{[l]}$ and $γ^{[l]} = γ^{[l]} - a*γ^{[l]}$
+* It adds a small bit of noise in the zs - has a slight regularization effect.
+
+By normilizes all the features, we speed up learning.
+
+### SoftMax Regression
+### Multiclass classificaion
+C -> number of classes, so that y (so a) will be (4, 1) shape.
+
+
+* Temporary variable:
+Element-wise exponentiation.
+For the final layer L: $t = e^{(z^{[L]})}$. Then a will be the normilization of this value. This can work with no hidden layers. 
+
+* It generalizes. Instead of having [1, 0, 0] for C=3, we'll have somehting like [0.8, 0.1, 0.1]
+. The need to sup up to 1.
+
+## Deep Learning Frameworks
+* On TensorFlow we basically need the formula for the cost function to be minimized. The rest can be similar. It has already build int the nessesary backward funcs, so we don't need to implement backprop.
+* We can iplement gradient descent, by giving it the cost func, or maybe use ADAM or similar instead of GD.
+
+# ML Project Structure
+## Orthogonalization
+### What to tune to improve results
+* Have a single number evaluation metric. For example, instead of having both Precision and Recal, you can combine them in F1 (harmonic mean of both).
+* Also cou have $accuracy - 0.5*runningtime$ to take into account time performance ("satisfysing" metric).
+* Can also have a thresgold on false positives for example, and not just accuracy.
+
+## Set up datasets
+### Validation (Dev) and Test sets
+* Sets needs to come from same distributions.
+* If we have to do this, we can either mix the distributions, or better: Haveboth distributions on the training set, and have the desired only deistribution on the validation and test sets.
+
+## Compare with human performance
+* Bayes optimal error = best possible error -higher theoretical performance. It can never be passed. It's not nessesarily 100%, can be lower. Can be estimated from human based error.
+* If model is worst than human, take human classified examples.
+* Better abalysis  variance/bias.
+* Manual error analysis.
+* Dev-training error = variance, training - human error = avoidable bias
+
+
+## Error Analysis
+* Sometimes we can do an error analysis instead of improving our model:
+Get mislabeled dev ser, count the 0s, might indicate that there's something wrong with the data. This is called "ceiling".
+
 
 
 ## Tips
@@ -266,7 +318,11 @@ We now use $z^{u[i](i)}$ instead of $z^{(i)}$. (adding γ and β)
 * Normalize inputs: bring everything around zero by removing the average, and then normilize the variance with `x /= σ^2`.
 * Pandas Way: Re-test hyperparameters (maybe change the learning rate) occasionally after data change OR
 * Caviar way: Could train models the same time
+* Make you first system quick and simple, and then iterate.
+* For less data, try transfel learning
+
 
 
 ## Deep Learning Heroes
-* 
+* Andrej Karpathy
+* Ruslan Salakhutdinov
