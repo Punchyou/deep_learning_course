@@ -311,7 +311,6 @@ For the final layer L: $t = e^{(z^{[L]})}$. Then a will be the normilization of 
 Get mislabeled dev ser, count the 0s, might indicate that there's something wrong with the data. This is called "ceiling".
 
 
-
 ## Tips
 * Start with a small NN or even logistic regression.
 * Debug Gradient descent by plotting J to # of iterations to see if J reduces monotonically.
