@@ -305,6 +305,9 @@ For the final layer L: $t = e^{(z^{[L]})}$. Then a will be the normilization of 
 * Manual error analysis.
 * Dev-training error = variance, training - human error = avoidable bias
 
+### Learn from multiple tasks
+* **Transfer learning** - use a NN to learn something, and then use it to predict something else as the learning is transfered, maybe with little twiking. Works good for small datasets.
+* **Multi-task learning** - use a NN to learn multiple things in the same time, and one could predict one task accuratelly. For example, in the case of autonomous cars, we have to predict values for  lights, pedestrians, cats, other cars etc, all in the same time. Unlike softmax regresion, here one image can have multiple labels. One big NN instead of many different NNs, might work better for all thos predictions. This is used less oftern than **transfer learning**.
 
 ## Error Analysis
 * Sometimes we can do an error analysis instead of improving our model:
