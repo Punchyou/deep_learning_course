@@ -328,3 +328,4 @@ Get mislabeled dev ser, count the 0s, might indicate that there's something wron
 ## Deep Learning Heroes
 * Andrej Karpathy
 * Ruslan Salakhutdinov
+* Pieter Abbeel
