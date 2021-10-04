@@ -116,6 +116,10 @@ Notes
 * We can also have different keep_probability for each layer.
 * Downside: not well defined J, so  the J to # iterations plot won't work.
 
+### Gradient Descent Checking
+Used to see if back probagation actually works.
+
+
 ## More regulirization methods
 
 ### Data Augmentation
@@ -329,3 +333,4 @@ Get mislabeled dev ser, count the 0s, might indicate that there's something wron
 * Andrej Karpathy
 * Ruslan Salakhutdinov
 * Pieter Abbeel
+* Yuanqing Lin
