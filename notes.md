@@ -167,7 +167,6 @@ Typical mini-batches: $2^6, 2^7, 2^8$.
 
 
 ## More optimization algs
-
 ### Moving/Exponential weighted average
 
 $$V_t = β*V_{t-1} + (1 - β)* θ_t$$
@@ -176,7 +175,7 @@ $$β = weight$$
 
 $$V = average$$
 
-Adapts more slower to data changes, but is used to have less data in memory and have faster training.
+Adapts slower to data changes, but is used to have less data in memory and have faster training.
 
 To avoid the delay, we do a **Bias correction**:
 
@@ -187,7 +186,7 @@ No need to have Nias correction here.
 
 ### Momentum
 
-We want slower learninf rate vertically, and faster horizontally:
+We want slower learning rate vertically, and faster horizontally:
 
 $$V_t = β*V_{dw} + (1 - β)* dw$$
 
