@@ -336,6 +336,22 @@ Get mislabeled dev ser, count the 0s, might indicate that there's something wron
 * For less data, try transfel learning
 
 # Convolutional Neural Networks
+## Why Convolutional NNs?
+* **Parameter Sharing**: A feature detector that's useful in one part of the image, is probably usefule for another part of the image. This means we'll have less parameters to train as we can resuse them. Works weel for both hight level and low level features.
+* **Sparcity of connections**: In each layer, each output value depends on a small number of inputs. For example, during filtering, we only care about a small section of the image, and not the whole data.
+* 
+
+
+## Notation of conculutional networks
+* $l$: layer number
+* Filter size: $f^{[l]}$
+* Padding: $p^{[l]}$
+* Stride: $s^{[l]}$
+* Number of Filters: $n^{[l]}_{c}$
+* Height dimention size: $n^{[l]}_{H}$
+* Width dimention size: $n^{[l]}_{W}$
+* Number of channels: $n^{[l]}_{c}$
+
 ## Filtering
 Having an image as an example:
 * Reduct the dimentions of the initial matrix, by multiplying a prt of it with a smaller matrix and sum it up at the end. Keep that number, and that's the new number that represents the initial square we tool. We could use something like:
@@ -371,21 +387,27 @@ We don't want for many layers the image to shrink every time. In order to fix th
 
 > It's recomented to use add number for filter dimentions.
 
-We can also use multiple filter at once.
+> We use multiple filters.
 
 ## Strided comvolution
 * Instead of using 1-step stride to be filtered in a 2 dimentional matrix, we use 2 or more strides. That's for both to the x and to y axis.
 * The output are less if stride is 2 or more.
 
-## Notation of conculutional networks
-* $l$: layer number
-* Filter size: $f^{[l]}$
-* Padding: $p^{[l]}$
-* Stride: $s^{[l]}$
-* Number of Filters: $n^{[l]}_{c}$
-* Height dimention size: $n^{[l]}_{H}$
-* Width dimention size: $n^{[l]}_{W}$
-* Number of channels: $n^{[l]}_{c}$
+
+## Pooling Layer
+* Impotove robustness of features
+* Reduce dimentions to improve performance
+
+#### Max Pooling
+* We devide the data into regions), and we take the max (of apply a filtering computation, like average) value, creating a new vector.
+* Hperparameters: Stride $s$, Filter $f$, both fixed - no parameters to learn. Common combination could be either of 2 or 3 for both parameters. Padding can also be used, but is usually 0. Can obviously also use cross-validation.
+
+### Fully Connected Layer
+Layer before last activation layer, that flattens data into a vector. We can have multiple FC layers. Each FC layer, is like a single layer NN. By using leww units for each one of the FC layers, we can have reduced vectors feeded into a SOFTMAX (activation) layer.
+
+> Common ConvNet: **LeNet-5**: Conv1 - Pool1 - Conv2 - Pool2 - FC3 - FC4 - SOFTMAX
+
+> We generally need to smoothly reduce the dimentions of the activations.
 
 ## Deep Learning Heroes
 * Andrej Karpathy
