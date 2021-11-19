@@ -49,6 +49,7 @@ _See solutions of week 2 here: https://github.com/Kulbear/deep-learning-coursera
 * `1 "epoch"` is a single pass through the training set (iteration)
 * `:=` values gets updated
 * `C` number of classes to predict
+* `*` means "convolutional operator" (technicaly is the cross correlation operator)
 
 ## NNs
 NNs are like taking the liner regression and repeating it twice
@@ -316,6 +317,14 @@ For the final layer L: $t = e^{(z^{[L]})}$. Then a will be the normilization of 
 * Sometimes we can do an error analysis instead of improving our model:
 Get mislabeled dev ser, count the 0s, might indicate that there's something wrong with the data. This is called "ceiling".
 
+## End-to-end learning
+* Lets the data speak. Instead of having a huge pipeline for autio recognition, we can have a big NN and feed it raw data. Works also well for machine translation.
+* We might need a lot of data for this, like 10.000 - 100.000 hours.
+* We can also do a multiple step approach. Works well for image recognition, like zooming in for each step.
+* Cons: exclude potentialy useful hand-designed components
+
+* Notes: MFCC is an algorithm for sudio recognition.
+
 
 ## Tips
 * Start with a small NN or even logistic regression.
@@ -326,7 +335,57 @@ Get mislabeled dev ser, count the 0s, might indicate that there's something wron
 * Make you first system quick and simple, and then iterate.
 * For less data, try transfel learning
 
+# Convolutional Neural Networks
+## Filtering
+Having an image as an example:
+* Reduct the dimentions of the initial matrix, by multiplying a prt of it with a smaller matrix and sum it up at the end. Keep that number, and that's the new number that represents the initial square we tool. We could use something like:
 
+$$\begin{bmatrix}...\end{bmatrix} * \begin{bmatrix}1 & 0 & -1\\1 & 0 & -1\\1 & 0 & -1\end{bmatrix}$$
+
+as a filtering matrix for vertical detection. We can achieve vertical recognition and edge detection.
+
+* Other filters:
+Sobel filter:
+$$\begin{bmatrix}-1 & 0 & 1\\2 & 0 & -2\\1 & 0 & -1\end{bmatrix}$$
+Adds a bit more waight to the middle row, and is a bit more robust.
+
+Or Shorr filter:
+$$\begin{bmatrix}3 & 0 & -3\\10 & 0 & -10\\3 & 0 & -3\end{bmatrix}$$
+
+> In code we can find concolution functions as:
+> * tensorflow: `tf.nn.conv2d`
+> * keras: `conv2D`
+> * other python funcs: `conv-forward`
+
+We generally have a number of filter for an image.
+In the case of an image, we have three channels: Red, Blue, Green -> 3rd dimention
+
+## Padding
+We have two issues with filtering:
+* We can only do filtering only a few times before the image is disctorted
+* the points in the edges are part of only one square that we select fo filter, so they are not contributing as much to the output as thee middle ones.
+
+We don't want for many layers the image to shrink every time. In order to fix those issues, we can pad the image before the concollutional layer:
+* We add an 1 or 2 dimentional zeros as the external border.
+* `Valid` convolution is  the one without padding, and `sane` is with padding, and the output is the same with the output size.
+
+> It's recomented to use add number for filter dimentions.
+
+We can also use multiple filter at once.
+
+## Strided comvolution
+* Instead of using 1-step stride to be filtered in a 2 dimentional matrix, we use 2 or more strides. That's for both to the x and to y axis.
+* The output are less if stride is 2 or more.
+
+## Notation of conculutional networks
+* $l$: layer number
+* Filter size: $f^{[l]}$
+* Padding: $p^{[l]}$
+* Stride: $s^{[l]}$
+* Number of Filters: $n^{[l]}_{c}$
+* Height dimention size: $n^{[l]}_{H}$
+* Width dimention size: $n^{[l]}_{W}$
+* Number of channels: $n^{[l]}_{c}$
 
 ## Deep Learning Heroes
 * Andrej Karpathy
